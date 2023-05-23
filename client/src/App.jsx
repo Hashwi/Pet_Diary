@@ -1,7 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
-function App() {
+
+  export default function App(){
+    const [pet, setPet] = useState([]);
+
+    useEffect(()=>{
+        getPets()
+    },[])
+
+
+    const getPets = () => {
+        fetch("/api/petlist")
+          .then(response => response.json())
+          .then(pet => {
+            setPet(pet);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      };
+  
   
   return (
     <>
@@ -11,5 +30,3 @@ function App() {
     </>
   )
 }
-
-export default App
