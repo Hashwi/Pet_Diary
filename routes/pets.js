@@ -29,10 +29,10 @@ router.get("/:id", petMustExist, function(req, res, next){
 
 router.post("/", async function(req,res,next){
   console.log('this works')
-  const {name, age, notes, medicine, vaccination} = req.body;
+  const {name, type, birthdate, notes} = req.body;
   try{
     await db(
-    `INSERT INTO petlist (name, age, notes, medicine,vaccination) VALUES("${name}","${age}","${notes}","${medicine}","${vaccination}")`
+    `INSERT INTO petlist (name, type, birthdate, notes) VALUES("${name}","${type}","${birthdate}","${notes}")`
     );
     res.send({message:'Pet was Added'})
 
@@ -44,18 +44,54 @@ router.post("/", async function(req,res,next){
 })
 
 // EDIT/ UPDATE a pet
-// router.put('/api/:id', async(req,res,next)=>{
-//   const {id} =req.params;
-//   try {
-//     await db(`UPDATE petlist SET complete = !complete WHERE id = ${id};`);
-//     // If the query is successfull you should send back the full list of items
-//     const results = await db("SELECT * FROM petlist");
-//     res.send(results.data);
-//   } catch (err) {
-//     res.status(500).send(err);
-//   }
+router.put('/:id', async (req, res, next) => {
+  console.log('this works');
+  const { id } = req.params;
+  const {name, type, birthdate, notes} = req.body;
 
-//})
+  try {
+    let myQuery = `UPDATE petlist SET `;
+    if (name) {
+      myQuery += `name = '${name}', `;
+    }
+    if (type) {
+      myQuery += `type = '${type}', `;
+    }
+    if (birthdate) {
+      myQuery += `birthdate = '${birthdate}', `;
+    }
+    if (notes) {
+      myQuery += `notes = '${notes}', `;
+    }
+    myQuery = myQuery.slice(0, -2); // Remove the trailing comma and space
+    myQuery += ` WHERE id = ${id};`;
+    console.log(myQuery);
+    await db(myQuery);
+
+    const updatedItem = await db(`SELECT * FROM petlist WHERE id = ${id};`);
+    res.send(updatedItem);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+  
+
+// DELETE a pet
+router.delete("/:id",petMustExist, async (req, res) => {
+  const {id } = req.params;
+  try {
+    await db(`DELETE FROM petlist WHERE id = ${id};`);
+    const results = await db("SELECT * FROM petlist");
+    res.send(results.data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+  //
+});
+
+
+
 
 
 module.exports = router;

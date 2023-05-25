@@ -19,7 +19,7 @@ con.connect(function(err) {
   console.log("Connected!");
 
   let sql =
-    "DROP TABLE if exists petlist; CREATE TABLE petlist(id INT NOT NULL AUTO_INCREMENT, firstname VARCHAR(40) not null, lastname VARCHAR(40) not null, PRIMARY KEY (id));";
+    "DROP TABLE if exists petlist; CREATE TABLE petlist(id INT NOT NULL AUTO_INCREMENT, name VARCHAR(60) null, type VARCHAR(45) null, birthdate DATE , notes VARCHAR(1000),PRIMARY KEY (id));";
   con.query(sql, function(err, result) {
     if (err) throw err;
     console.log("Table creation `petlist` was successful!");
@@ -29,3 +29,4 @@ con.connect(function(err) {
 
   con.end();
 });
+
