@@ -15,14 +15,18 @@ router.get('/', function(req, res, next) {
 });
 
 // GET one pet
-router.get("/:id", petMustExist, function(req, res, next){
+router.get("/:id", petMustExist, async function(req, res, next){
 
-  db("SELECT * FROM petlist;")
-    .then(results => {
-      res.send(results.data);
-    })
-    .catch(err => res.status(500).send(err));
-});
+  const { id } = req.params;
+  try {
+    const results = await db(`SELECT * FROM petlist WHERE id = ${id}`);
+    if (results.data.length) {
+      res.send(results.data[0]);
+    } else res.status(404).send({ message: "Pet was not found" });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
+})
 
 
 //INSERT a new pet

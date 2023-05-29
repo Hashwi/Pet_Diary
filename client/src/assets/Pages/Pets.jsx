@@ -4,23 +4,32 @@ import AddPet from "../components/AddPet";
 
 export default function Pets() {
   const [pets, setPets] = useState([]);
+  const [error, setError] = useState(null);
+
 
   useEffect(() => {
-    loadPets();
+    getPets();
   }, []);
 
-  async function loadPets() {
-    const res = await fetch("/api/id");
-    const data = await res.json();
-    setPets(data);
+  async function getPets() {
+    try {
+      const response = await fetch("/api");
+      const data = await response.json();
+      if (!response.ok) throw new Error(response.statusText);
+      setPets(data);
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   const updatePet = async (id) => {
-    sendRequest("PUT", id);
+    sendRequest("PUT", id)
+    .then(getPets)
   };
 
   const deletePet = async (id) => {
-    sendRequest("DELETE", id);
+    sendRequest("DELETE", id)
+    .then(getPets)
   };
 
   const sendRequest = async (method, id = "", options = {}) => {
@@ -40,7 +49,7 @@ export default function Pets() {
     <div className="grid-container">
         {pets.map((pet) => (
           <div key={pet.id} className="grid-item">
-             <Link to={`/api/${pet.id}`}>
+             <Link to={`/pets/${pet.id}`}>
             <div>
               <img src="/rabbit.png" alt="image" />
             </div>
@@ -48,6 +57,7 @@ export default function Pets() {
             <div>{pet.type}</div>
             <div>{pet.birthdate}</div>
             <div>{pet.notes}</div>
+            </Link>
             <button
               className="btn btn-outline-danger btn-sm"
               onClick={() => updatePet(pet.id)}
@@ -60,7 +70,7 @@ export default function Pets() {
             >
               <i className="fa-solid fa-trash-can"></i> Delete
             </button>
-            </Link>
+           
           </div>
         ))}
       </div>

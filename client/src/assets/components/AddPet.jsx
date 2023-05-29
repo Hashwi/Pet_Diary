@@ -76,70 +76,72 @@ export default function AddPet() {
 
   return (
     <div className="container">
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            Name:
-          </label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            className="form-control"
-            placeholder="Name"
-            value={input.name}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="type" className="form-label">
-            Select Type:
-          </label>
-          <input
-            type="text"
-            name="type"
-            id="type"
-            className="form-control"
-            placeholder="Select pet"
-            value={input.type}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="birthdate" className="form-label">
-            Date of Birth:
-          </label>
-          <input
-            type="date"
-            name="birthdate"
-            id="birthdate"
-            className="form-control"
-            placeholder="Date of birth"
-            value={input.birthdate}
-            onChange={handleInputChange}
-          /><br></br>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="notes" className="form-label">
-            Special Notes:
-          </label>
-          <textarea
-            name="notes"
-            id="notes"
-            className="form-control"
-            placeholder="Notes"
-            value={input.notes}
-            onChange={handleInputChange}
-          />
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
-      <br></br>
-      {error && <div>{error}</div>}
-      <div className="grid-container">
+      <div className="form-container border p-4">
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">
+              Name:
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              className="form-control"
+              placeholder="Name"
+              value={input.name}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="type" className="form-label">
+              Select Type:
+            </label>
+            <input
+              type="text"
+              name="type"
+              id="type"
+              className="form-control"
+              placeholder="Select pet"
+              value={input.type}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="birthdate" className="form-label">
+              Date of Birth:
+            </label>
+            <input
+              type="date"
+              name="birthdate"
+              id="birthdate"
+              className="form-control"
+              placeholder="Date of birth"
+              value={input.birthdate}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="notes" className="form-label">
+              Special Notes:
+            </label>
+            <textarea
+              name="notes"
+              id="notes"
+              className="form-control"
+              placeholder="Notes"
+              value={input.notes}
+              onChange={handleInputChange}
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+        </form>
+        <br />
+        {error && <div>{error}</div>}
+      </div>
+
+      <div className="grid-container mt-4">
         {pets.map((pet) => (
           <div key={pet.id} className="grid-item">
             <div>
@@ -149,22 +151,23 @@ export default function AddPet() {
             <div>{pet.type}</div>
             <div>{pet.birthdate}</div>
             <div>{pet.notes}</div>
-            <button
-              className="btn btn-outline-danger btn-sm"
-              onClick={() => updatePet(pet.id)}
-            >
-              <i className="fa-solid fa-trash-can"></i> Edit
-            </button>
-            <button
-              className="btn btn-outline-danger btn-sm"
-              onClick={() => deletePet(pet.id)}
-            >
-              <i className="fa-solid fa-trash-can"></i> Delete
-            </button>
+            <span>
+              <button
+                className="btn btn-outline-info btn-sm"
+                onClick={() => updatePet(pet.id)}
+              >
+                <i className="fa-solid fa-trash-can"></i> Edit
+              </button>
+              <button
+                className="btn btn-outline-danger btn-sm"
+                onClick={() => deletePet(pet.id)}
+              >
+                <i className="fa-solid fa-trash-can"></i> Delete
+              </button>
+            </span>
           </div>
         ))}
       </div>
-    </div>
     </div>
   );
 }
