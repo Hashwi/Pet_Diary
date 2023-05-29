@@ -34,14 +34,15 @@ export default function App() {
           </div>
         </div>
       </nav>
-
-      <div className="routDiv">
+      <div >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/pets" element={<Pets />} />
           <Route path="/pets/:id" element={<Pet />} />
         </Routes>
       </div>
+  
     </>
-  );
+   
+    );
 }

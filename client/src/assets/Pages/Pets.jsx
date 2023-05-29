@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, Outlet } from "react-router-dom";
-import AddPet from "../components/AddPet";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import EditPet from "../components/EditPet";
 
 export default function Pets() {
   const [pets, setPets] = useState([]);
   const [error, setError] = useState(null);
-
+  const [editingPetId, setEditingPetId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getPets();
@@ -22,14 +23,27 @@ export default function Pets() {
     }
   }
 
-  const updatePet = async (id) => {
-    sendRequest("PUT", id)
-    .then(getPets)
+  const updatePet = async (editedPet) => {
+    try {
+      const response = await fetch(`/api/${editedPet.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editedPet),
+      });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      getPets();
+      setEditingPetId(null);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const deletePet = async (id) => {
-    sendRequest("DELETE", id)
-    .then(getPets)
+    sendRequest("DELETE", id).then(getPets);
   };
 
   const sendRequest = async (method, id = "", options = {}) => {
@@ -42,41 +56,60 @@ export default function Pets() {
     }
   };
 
+  const showPetPage = (id) => {
+    navigate(`/pets/${id}`);
+  };
+
   return (
-   
     <div>
-      <h1>My Pets</h1><br></br>
-    <div className="grid-container">
+      <h1>My Pets</h1>
+      <br />
+      <div className="grid-container">
         {pets.map((pet) => (
           <div key={pet.id} className="grid-item">
-             <Link to={`/pets/${pet.id}`}>
-            <div>
-              <img src="/rabbit.png" alt="image" />
-            </div>
-            <div>{pet.name}</div>
-            <div>{pet.type}</div>
-            <div>{pet.birthdate}</div>
-            <div>{pet.notes}</div>
+            <Link to={`/pets/${pet.id}`}>
+              <div>
+                <img src="/rabbit.png" alt="image" />
+              </div>
+              <div className="grid-item">Name: {pet.name}</div>
+              <div className="grid-item">Type: {pet.type}</div>
+              <div className="grid-item"> Age: {pet.birthdate}</div>
+              <div className="grid-item"> Notes: {pet.notes}</div>
             </Link>
-            <button
-              className="btn btn-outline-danger btn-sm"
-              onClick={() => updatePet(pet.id)}
-            >
-              <i className="fa-solid fa-trash-can"></i> Edit
-            </button>
-            <button
-              className="btn btn-outline-danger btn-sm"
-              onClick={() => deletePet(pet.id)}
-            >
-              <i className="fa-solid fa-trash-can"></i> Delete
-            </button>
-           
+            <br></br>
+            
+            <div className="grid-container-1">
+              {editingPetId === pet.id ? (
+                <EditPet pet={pet} updatePet={updatePet} />
+              ) : (
+                <span>
+                  <button
+                    className="btn btn-outline-info btn-sm"
+                    onClick={() => setEditingPetId(pet.id)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => deletePet(pet.id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="btn btn-outline-success btn-sm"
+                    onClick={() => showPetPage(pet.id)}
+                  >
+                    Go To Profile
+                  </button>
+                </span>
+              )}
+            </div>
           </div>
         ))}
       </div>
 
       <div>
-       <Outlet />
+        <Outlet />
       </div>
     </div>
   );

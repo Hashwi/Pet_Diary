@@ -6,11 +6,10 @@ export default function Home() {
   <div>
     <br></br>
   <h1>Pet Diary 📖</h1>
-      <div>
+      <div className="container-fluid">
         <br></br>
         <h4>Add your pet 🖋️</h4>
-        <AddPet/>
-        
+        <AddPet/> 
       </div>
   </div>
   )

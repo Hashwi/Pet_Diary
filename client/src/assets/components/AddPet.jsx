@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./AddPet.css";
+import EditPet from "./EditPet";
+
+const petTypes = ["cat", "dog", "bird", "fish"];
 
 export default function AddPet() {
   const [input, setInput] = useState({
@@ -10,6 +13,7 @@ export default function AddPet() {
   });
   const [pets, setPets] = useState([]);
   const [error, setError] = useState(null);
+  // const [editingPetId, setEditingPetId] = useState(null);
 
   useEffect(() => {
     getPets();
@@ -75,70 +79,77 @@ export default function AddPet() {
   };
 
   return (
-    <div className="container">
-      <div className="form-container border p-4">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">
-              Name:
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              className="form-control"
-              placeholder="Name"
-              value={input.name}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="type" className="form-label">
-              Select Type:
-            </label>
-            <input
-              type="text"
-              name="type"
-              id="type"
-              className="form-control"
-              placeholder="Select pet"
-              value={input.type}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="birthdate" className="form-label">
-              Date of Birth:
-            </label>
-            <input
-              type="date"
-              name="birthdate"
-              id="birthdate"
-              className="form-control"
-              placeholder="Date of birth"
-              value={input.birthdate}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="notes" className="form-label">
-              Special Notes:
-            </label>
-            <textarea
-              name="notes"
-              id="notes"
-              className="form-control"
-              placeholder="Notes"
-              value={input.notes}
-              onChange={handleInputChange}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-        </form>
-        <br />
-        {error && <div>{error}</div>}
+    <div className="container-fluid">
+      <div className="form-container border p-5">
+        <div className="container">
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Name:
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                className="form-control"
+                placeholder="Name"
+                value={input.name}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="type" className="form-label">
+                Select Type:
+              </label>
+              <select
+                name="type"
+                id="type"
+                className="form-control"
+                value={input.type}
+                onChange={handleInputChange}
+              >
+                <option value="">Select pet</option>
+                {petTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <label htmlFor="birthdate" className="form-label">
+                Date of Birth:
+              </label>
+              <input
+                type="date"
+                name="birthdate"
+                id="birthdate"
+                className="form-control"
+                placeholder="Date of birth"
+                value={input.birthdate}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="notes" className="form-label">
+                Special Notes:
+              </label>
+              <textarea
+                name="notes"
+                id="notes"
+                className="form-control"
+                placeholder="Notes"
+                value={input.notes}
+                onChange={handleInputChange}
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Submit
+            </button>
+          </form>
+          <br />
+          {error && <div>{error}</div>}
+        </div>
       </div>
 
       <div className="grid-container mt-4">
