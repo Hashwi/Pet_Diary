@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./AddPet.css";
 import EditPet from "./EditPet";
 
 const petTypes = ["cat", "dog", "bird", "fish"];
 
 export default function AddPet() {
+  const navigate = useNavigate();
+
   const [input, setInput] = useState({
     name: "",
     type: "",
@@ -13,7 +16,6 @@ export default function AddPet() {
   });
   const [pets, setPets] = useState([]);
   const [error, setError] = useState(null);
-  // const [editingPetId, setEditingPetId] = useState(null);
 
   useEffect(() => {
     getPets();
@@ -30,7 +32,10 @@ export default function AddPet() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    addPet().then(getPets);
+    addPet().then(() => {
+      getPets();
+      navigate("/pets"); // Navigate to Pets page
+    });
   };
 
   async function getPets() {
@@ -83,7 +88,7 @@ export default function AddPet() {
       <div className="form-container border p-5">
         <div className="container">
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
+          <div className="mb-3">
               <label htmlFor="name" className="form-label">
                 Name:
               </label>
@@ -143,41 +148,14 @@ export default function AddPet() {
                 onChange={handleInputChange}
               />
             </div>
-            <button type="submit" className="btn btn-primary">
+
+            <button type="submit" className=" btn-outline-primary btn-sm">
               Submit
             </button>
           </form>
           <br />
           {error && <div>{error}</div>}
         </div>
-      </div>
-
-      <div className="grid-container mt-4">
-        {pets.map((pet) => (
-          <div key={pet.id} className="grid-item">
-            <div>
-              <img src="/rabbit.png" alt="image" />
-            </div>
-            <div>{pet.name}</div>
-            <div>{pet.type}</div>
-            <div>{pet.birthdate}</div>
-            <div>{pet.notes}</div>
-            <span>
-              <button
-                className="btn btn-outline-info btn-sm"
-                onClick={() => updatePet(pet.id)}
-              >
-                <i className="fa-solid fa-trash-can"></i> Edit
-              </button>
-              <button
-                className="btn btn-outline-danger btn-sm"
-                onClick={() => deletePet(pet.id)}
-              >
-                <i className="fa-solid fa-trash-can"></i> Delete
-              </button>
-            </span>
-          </div>
-        ))}
       </div>
     </div>
   );

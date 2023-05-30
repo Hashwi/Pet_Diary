@@ -29,7 +29,7 @@
 :root {
  
   width: 100%;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: fantasy;
   line-height: 1.5;
   font-weight: 400;
 
@@ -54,6 +54,7 @@ a:hover {
 }
 
 body {
+  font-family: fantasy;
   margin: 0;
   display: flex;
   place-items: center;

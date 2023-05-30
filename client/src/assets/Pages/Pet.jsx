@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,  } from "react-router-dom";
 import EditPet from "../components/EditPet";
+import "./Pet.css";
 
 function Pet() {
   const [pet, setPet] = useState({});
@@ -40,22 +41,27 @@ function Pet() {
     }
   };
 
-  const deletePet = async (id) => {
+  const handleDelete = async () => {
     try {
-      const response = await fetch(`/api/${id}`, {
+      const response = await fetch(`/api/${pet.id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      loadPet();
+      console.log("Pet deleted");
+      window.location.href = "/pets"; // Route back to the Pets page
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
+    <div><br></br><br></br><br></br>
+    <header> <img src="https://cdn.pixabay.com/photo/2020/12/01/07/04/cats-5793173_1280.jpg"/></header>
     <div className="container">
+      
+      <h1>Pet Profile🧸</h1>
       <div className="row">
         <div className="col-lg-4">
           <img
@@ -65,11 +71,11 @@ function Pet() {
           />
         </div>
         <div className="col-lg-8">
-          <div className="card border border-5 border-success">
+          <div className="card border border-5 border-success" >
             <div className="card-body">
               <h1 className="card-title">{pet.name}</h1>
-              <p className="card-text">Type: {pet.type}</p>
-              <p className="card-text">Birthdate: {pet.birthdate}</p>
+              <h3 className="card-text">Type: {pet.type}</h3>
+              <h5 className="card-text">Birthdate: {pet.birthdate}</h5>
               <p className="card-text">Notes: {pet.notes}</p>
               <div className="btn-group" role="group" aria-label="Pet Actions">
                 {editingPetId === pet.id ? (
@@ -84,7 +90,7 @@ function Pet() {
                     </button>
                     <button
                       className="btn btn-outline-danger btn-sm"
-                      onClick={() => deletePet(pet.id)}
+                      onClick={handleDelete}
                     >
                       Delete
                     </button>
@@ -93,6 +99,7 @@ function Pet() {
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

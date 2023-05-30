@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import EditPet from "../components/EditPet";
+import "./Pets.css";
 
 export default function Pets() {
   const [pets, setPets] = useState([]);
@@ -61,24 +62,28 @@ export default function Pets() {
   };
 
   return (
-    <div>
-      <h1>My Pets</h1>
-      <br />
-      <div className="grid-container">
+    <div className="container-fluid">
+      <br /><br /><br />
+      <header> <img src="https://cdn.pixabay.com/photo/2020/12/01/07/04/cats-5793173_1280.jpg"/></header>
+      <h1 className="text-center">My Pets 🐾</h1><br />
+
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         {pets.map((pet) => (
-          <div key={pet.id} className="grid-item">
-            <Link to={`/pets/${pet.id}`}>
-              <div>
-                <img src="/rabbit.png" alt="image" />
+          <div key={pet.id} className="col-3">
+            <Link to={`/pets/${pet.id}`} className="card text-decoration-none">
+              <div className="card-body">
+                <div className="pet-image">
+                  <img src="/rabbit.png" alt="Pet" className="img-fluid" />
+                </div>
+                <div className="pet-items">
+                  <h2 className="card-title">{pet.name}</h2>
+                  <h5>Type: {pet.type}</h5>
+                  <h6>Age: {pet.birthdate}</h6>
+                  <p>Notes: {pet.notes}</p>
+                </div>
               </div>
-              <div className="grid-item">Name: {pet.name}</div>
-              <div className="grid-item">Type: {pet.type}</div>
-              <div className="grid-item"> Age: {pet.birthdate}</div>
-              <div className="grid-item"> Notes: {pet.notes}</div>
             </Link>
-            <br></br>
-            
-            <div className="grid-container-1">
+            <div className="button-group">
               {editingPetId === pet.id ? (
                 <EditPet pet={pet} updatePet={updatePet} />
               ) : (

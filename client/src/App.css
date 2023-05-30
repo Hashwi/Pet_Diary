@@ -4,6 +4,9 @@
   padding: 2rem;
   text-align: center;
 }
+a :hover{
+text-decoration: none;
+}
 
 .logo {
   height: 6em;
@@ -12,7 +15,8 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em rgba(149, 142, 58, 0.667));
+  text-decoration: none;
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
@@ -39,8 +43,4 @@
 
 .read-the-docs {
   color: #888;
-}
-
-.routDiv{
-  width:
 }

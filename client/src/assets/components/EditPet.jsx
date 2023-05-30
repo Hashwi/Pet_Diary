@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./EditPet.css"
 
 const EditPet = ({ pet, updatePet }) => {
   const [editedPet, setEditedPet] = useState({ ...pet });
@@ -37,6 +38,7 @@ const EditPet = ({ pet, updatePet }) => {
   };
 
   return (
+    <div className="EditForm">
     <form className="EditPet" onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
@@ -90,11 +92,12 @@ const EditPet = ({ pet, updatePet }) => {
           onChange={handleInputChange}
         ></textarea>
       </div>
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-outline-warning btn-sm">
         Save
       </button>
     </form>
-  );
+    </div>
+  )
 };
 
 export default EditPet;
