@@ -1,0 +1,13 @@
+.auth-form-container {
+    display: inline-flex;
+    min-height: 50vh;
+    justify-content: center;
+    width: 50%;
+    align-self: center;
+    border: solid gray;
+    border-width: 0.05rem;
+}
+
+.login-form {
+    width: 50%;
+}

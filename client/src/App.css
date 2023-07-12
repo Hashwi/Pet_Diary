@@ -44,3 +44,63 @@ text-decoration: none;
 .read-the-docs {
   color: #888;
 }
+
+.auth-form-container,.login-form, .register-form {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+label {
+  text-align: left;
+  padding: 0.25rem 0rem;
+  color: rgba(149, 142, 58, 0.667);
+  font-size: 20px;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 10px;
+}
+
+button {
+  border: none;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin:10px;
+}
+
+.link-btn {
+  background-color: none transparent;
+  border: none;
+  color: rgba(149, 142, 58, 0.667);
+  text-decoration: underline;
+}
+
+.hide {
+  display: none;
+}
+
+.offscreen {
+  display: none;
+}
+
+.instuctions {
+  display: block;
+}
+
+.navbar {
+  max-height: 25%; 
+  align-content: center;
+  padding-top: 10px;
+}
+
+.logoutBtn {
+  padding: 5px 7px;
+}

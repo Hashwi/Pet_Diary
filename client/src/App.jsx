@@ -1,56 +1,90 @@
-import React, { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import "./App.css";
+import React, { useState, useEffect, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./assets/Pages/Home";
 import Pet from "./assets/Pages/Pet";
 import Pets from "./assets/Pages/Pets";
 import AddPet from "./assets/components/AddPet";
+import Login from "./assets/Pages/Login";
+import Register from "./assets/Pages/Register";
+import Dashboard from "./assets/Pages/Dashboard";
+import NavBar from "./assets/components/NavBar";
+import AuthContext from "./context/AuthContext";
+import RequireAuth from "./assets/components/RequireAuth";
 
-import "./App.css";
+function App() {
 
-export default function App() {
-  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  // const auth = useContext(AuthContext);
 
-  const toggleNav = () => {
-    setIsNavOpen(!isNavOpen);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setUser(true)
+    }
+  }, []);
+
+  function login(email, password) {
+    setUser(true)
+  }
+
+  const logout = () => {
+    setUser(false);
+    localStorage.removeItem("token");
   };
 
+  const authObject = {
+    user,
+    login,
+    logout,
+  }
+
   return (
-    <>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
-            Pet Diary📖
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            onClick={toggleNav}
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`}>
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/pets">
-                  My Pets
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
+  <AuthContext.Provider value={authObject}>
       <div>
+        <div>
+          <NavBar />
+        </div>
         <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />
-          <Route path="/pets" element={<Pets />} />
-          <Route path="/pets/:id" element={<Pet />} />
+          <Route
+            path="/private"
+            element={
+              <RequireAuth>
+                <Dashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/private/pets"
+            element={
+              <RequireAuth>
+                <Pets />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/private/pets/:id"
+            element={
+              <RequireAuth>
+                <Pet />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/private/addpet"
+            element={
+              <RequireAuth>
+                <AddPet />
+              </RequireAuth>
+            }
+          />
         </Routes>
       </div>
-    </>
+    </AuthContext.Provider>
   );
 }
+
+export default App;
