@@ -16,7 +16,7 @@ module.exports = async function db(query) {
       host: DB_HOST || "127.0.0.1",
       user: DB_USER || "root",
       password: DB_PASS,
-      database: DB_NAME || "database",
+      database: DB_NAME || "mvp_extension",
       multipleStatements: true
     });
 
@@ -43,7 +43,6 @@ module.exports = async function db(query) {
           }
 
           // push the result (which should be an OkPacket) to data
-          // germinal - removed next line because it returns an array in an array when empty set
           // results.data.push(result);
         } else if (result[0].constructor.name == "RowDataPacket") {
           // push each row (RowDataPacket) to data

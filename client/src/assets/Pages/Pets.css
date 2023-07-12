@@ -1,43 +1,18 @@
-.grid-container {
+ 
+  .petscontainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
   }
-  
-  .grid-item {
-    width: 23%;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    box-sizing: border-box;
+
+  .pet {
+    display: inline-flex;
+    flex-direction: column;
+    min-width: 250px;
+    padding: 5px;
   }
-  
-  .grid-item .pet-image {
-    width: 100%;
-    text-align: center;
+
+  .petpic {
+    max-width: 150px;
+    max-height: 150px;
   }
-  
-  .grid-item .pet-image img {
-    width: 80%;
-    height: auto;
-    border-radius: 5px;
-  }
-  
-  .grid-item .pet-items {
-    margin-top: 10px;
-    text-align: center;
-  }
-  
-  .grid-item .pet-items h2 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .grid-item .pet-items h5,
-  .grid-item .pet-items h6,
-  .grid-item .pet-items p {
-    margin: 5px 0;
-  }
-  

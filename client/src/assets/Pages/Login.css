@@ -1,0 +1,12 @@
+.auth-form-container {
+    display: inline-flex;
+    min-height: 50vh;
+    justify-content: center;
+    background-image: linear-gradient(79deg, #84A98C, #f9dcc4 48%, #fcd5ce);
+    width: 50%;
+    align-self: center;
+}
+
+.login-form {
+    width: 50%;
+}

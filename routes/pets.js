@@ -1,56 +1,53 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../model/helper");
-const petMustExist =require("../model/guards/petMustExist");
+const petMustExist = require("../model/guards/petMustExist");
+const userShouldBeLoggedIn = require("../model/guards/userShouldBeLoggedIn");
 
 
 // Get pet list
-router.get('/', function(req, res, next) {
-  console.log('abd')
-  db("SELECT * FROM petlist;")
+router.get('/', userShouldBeLoggedIn, (req, res) => {
+  db(`SELECT * FROM petlist WHERE user_id=${req.user_id};`)
     .then(results => {
       res.send(results.data);
     })
     .catch(err => res.status(500).send(err));
 });
 
-// GET one pet
-router.get("/:id", petMustExist, async function(req, res, next){
 
-  const { id } = req.params;
+// GET one pet
+router.get("/:id", userShouldBeLoggedIn, async function(req, res) {
+  const petId = req.params.id; // Get the pet ID from the URL parameter
   try {
-    const results = await db(`SELECT * FROM petlist WHERE id = ${id}`);
+    const results = await db(`SELECT * FROM petlist WHERE user_id=${req.user_id} AND id = ${petId};`);
     if (results.data.length) {
       res.send(results.data[0]);
-    } else res.status(404).send({ message: "Pet was not found" });
+    } else {
+      res.status(404).send({ message: "Pet was not found" });
+    }
   } catch (err) {
-    res.status(500).send({ message: err });
+    res.status(500).send(err);
   }
-})
+});
 
-
-//INSERT a new pet
-
-router.post("/", async function(req,res,next){
-  console.log('this works')
+//CREATE a new pet
+router.post("/", userShouldBeLoggedIn, async function(req,res) {
   const {name, type, birthdate, notes} = req.body;
   try{
-    await db(
-    `INSERT INTO petlist (name, type, birthdate, notes) VALUES("${name}","${type}","${birthdate}","${notes}")`
+    const results = await db(
+    `INSERT INTO petlist (name, type, birthdate, notes, user_id) VALUES("${name}","${type}","${birthdate}","${notes}", "${req.user_id}");`
     );
-    res.send({message:'Pet was Added'})
-
+    res.send({message:'Pet was added'})
   } catch(err){
     console.log(err)
     res.status(500).send(err);
-
   }
 })
 
+
 // EDIT/ UPDATE a pet
-router.put('/:id', async (req, res, next) => {
-  console.log('this works');
-  const { id } = req.params;
+router.put('/:pet_id', userShouldBeLoggedIn, async (req, res) => {
+  const { pet_id } = req.params;
   const {name, type, birthdate, notes} = req.body;
 
   try {
@@ -68,33 +65,24 @@ router.put('/:id', async (req, res, next) => {
       myQuery += `notes = '${notes}', `;
     }
     myQuery = myQuery.slice(0, -2); // Remove the trailing comma and space
-    myQuery += ` WHERE id = ${id};`;
-    console.log(myQuery);
-    await db(myQuery);
-
-    const updatedItem = await db(`SELECT * FROM petlist WHERE id = ${id};`);
+    myQuery += ` WHERE id = ${pet_id};`;
+    const updatedItem = await db(myQuery);
     res.send(updatedItem);
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
-  
-
 // DELETE a pet
-router.delete("/:id",petMustExist, async (req, res) => {
-  const {id } = req.params;
+router.delete("/:pet_id", petMustExist, userShouldBeLoggedIn, async (req, res) => {
+  const { pet_id } = req.params;
   try {
-    await db(`DELETE FROM petlist WHERE id = ${id};`);
-    const results = await db("SELECT * FROM petlist");
-    res.send(results.data);
+    await db(`DELETE FROM petlist WHERE id = ${ pet_id };`);
+    res.send("Pet removed");
   } catch (err) {
     res.status(500).send(err);
   }
-  //
 });
-
-
 
 
 

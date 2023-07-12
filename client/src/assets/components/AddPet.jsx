@@ -34,16 +34,21 @@ export default function AddPet() {
     event.preventDefault();
     addPet().then(() => {
       getPets();
-      navigate("/pets"); // Navigate to Pets page
+      navigate("/private/pets"); // Navigate to Pets page
     });
-  };
+  }
 
   async function getPets() {
     try {
-      const response = await fetch("/api");
-      const data = await response.json();
-      if (!response.ok) throw new Error(response.statusText);
-      setPets(data);
+      const response = await fetch(`/api/pets`, {
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+        const data = await response.json();
+        if (!response.ok) throw new Error(response.statusText);
+        setPets(data);
+        // console.log(data);
     } catch (err) {
       setError(err.message);
     }
@@ -54,30 +59,18 @@ export default function AddPet() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: "Bearer " + localStorage.getItem("token"),
       },
       body: JSON.stringify(input),
     };
     try {
-      const response = await fetch("/api", options);
-      if (!response.ok) throw new Error(response.statusText);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const updatePet = async (id) => {
-    sendRequest("PUT", id);
-  };
-
-  const deletePet = async (id) => {
-    sendRequest("DELETE", id);
-  };
-
-  const sendRequest = async (method, id = "", options = {}) => {
-    try {
-      const response = await fetch(`/api/${id}`, { method, ...options });
-      if (!response.ok) throw new Error(response.statusText);
-      await getPets();
+      const response = await fetch("/api/pets", options);
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      // Handle successful response here (e.g., update pet list, reset input form)
+      console.log("Pet added successfully");
+      // Additional actions can be performed based on the specific requirements of your application
     } catch (err) {
       setError(err.message);
     }
@@ -85,6 +78,9 @@ export default function AddPet() {
 
   return (
     <div className="container-fluid">
+      <br /><br /><br />
+      <header> <img src="https://cdn.pixabay.com/photo/2020/12/01/07/04/cats-5793173_1280.jpg"/></header><br/>
+      <h1>Add your pet 🖋️</h1>
       <div className="form-container border p-5">
         <div className="container">
           <form onSubmit={handleSubmit}>
@@ -154,7 +150,6 @@ export default function AddPet() {
             </button>
           </form>
           <br />
-          {error && <div>{error}</div>}
         </div>
       </div>
     </div>
