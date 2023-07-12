@@ -5,6 +5,7 @@
     width: 50%;
     align-self: center;
     border: solid gray;
+    border-width: 0.05rem;
 }
 
 .login-form {
